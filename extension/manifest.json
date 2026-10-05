@@ -1,0 +1,51 @@
+{
+  "manifest_version": 2,
+  "name": "lwagent",
+  "version": "0.5.0",
+  "description": "Toolbar toggle that lets a local agent read the page you are looking at. Off until you click it; no debug port, so navigator.webdriver stays false.",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "{00000000-0000-0000-0000-000000000000}",
+      "strict_min_version": "128.0"
+    }
+  },
+  "//": "MV2 on purpose. MV3 broke this three ways: origin controls meant host_permissions were not actually granted, the background event page suspends and silently kills the poll loop, and the MV3 base CSP does not whitelist localhost (Firefox's MV2 base CSP does). The scripting API has no min_manifest_version in this build, so world:MAIN page-context eval still works here.",
+  "permissions": [
+    "scripting",
+    "tabs",
+    "storage",
+    "webRequest",
+    "webRequestBlocking",
+    "webRequestFilterResponse",
+    "<all_urls>",
+    "http://127.0.0.1/*",
+    "ws://127.0.0.1/*"
+  ],
+  "content_security_policy": "script-src 'self'; object-src 'self'; connect-src http://127.0.0.1:8844 ws://127.0.0.1:8844;",
+  "background": {
+    "scripts": [
+      "background.js"
+    ],
+    "persistent": true
+  },
+  "browser_action": {
+    "default_title": "lwagent: agent access OFF",
+    "default_icon": {
+      "16": "icon.svg",
+      "32": "icon.svg",
+      "48": "icon.svg"
+    }
+  },
+  "icons": {
+    "48": "icon.svg",
+    "96": "icon.svg"
+  },
+  "commands": {
+    "toggle": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+U"
+      },
+      "description": "Toggle lwagent agent access"
+    }
+  }
+}
