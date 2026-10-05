@@ -8,11 +8,11 @@ A Firefox/LibreWolf extension plus a tiny local bridge that lets a coding agent 
 
 When a site breaks for me, the question is always "what does MY tab see": my logins, my cookies, my uBlock Origin and Pi-hole filtering. Playwright-style tools answer a different question. They open a fresh, logged-out browser profile with no extensions, and that browser announces itself as automated.
 
-The obvious alternative is to start my real browser with `--remote-debugging-port`. I tried that and kept it for less than a day. With the port open, `navigator.webdriver` is `true` on every page, even with no client attached, and there is no pref to turn that off. I checked it with a local test page that reported the value back: no flag gives `false`, flag gives `true`. Within an hour I was getting "robot or human?" challenges on ordinary browsing and a Cloudflare check on sites I use every day. The port also cannot be opened on a browser that is already running, so every debugging session meant quitting and losing my tab state.
+The obvious alternative is to start my real browser with `--remote-debugging-port`. I tried that and kept it for less than a day. With the port open, `navigator.webdriver` is `true` on every page, even with no client attached, and there is no pref to turn that off. I checked it with a local test page that reported the value back: no flag gives `false`, flag gives `true`. Within an hour I was getting "robot or human?" challenges on ordinary browsing and a Cloudflare check on claude.ai. The port also cannot be opened on a browser that is already running, so every debugging session meant quitting and losing my tab state.
 
 An extension lives inside the browser, needs no debug port, and can be switched on and off with a toolbar button. So I built one, and a bridge so an agent on the same machine can talk to it.
 
-The first real problem it solved: a retail site's bot-check widget showed up as an empty grey box I could not click. The page console showed nothing useful. A capture showed the widget's script request failing with `NS_ERROR_ABORT`, which in Firefox means an extension cancelled it. It was uBlock Origin, on a first-party path, which is why allowing the vendor's domains in Pi-hole had not fixed it.
+The first real problem it solved: a retail site's bot-check widget showed up as an empty grey box I could not click. The page console showed nothing useful. A capture showed the widget's script request failing with `NS_ERROR_ABORT`, which in Firefox means an extension cancelled it. The likely culprit was uBlock Origin on a first-party path, which is why allowing the vendor's domains in Pi-hole had not fixed it.
 
 ## How it works
 
